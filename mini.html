@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foreign Trading System</title>
+    <style>
+        /* Basic Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="email"],
+        button {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        p {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Additional Styles for Options */
+        .option-container {
+            margin-top: 10px;
+        }
+
+        .option-container label {
+            margin-right: 10px;
+        }
+
+        .conversion-amount {
+            display: none;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="login" class="container">
+        <h2>Login</h2>
+        <form onsubmit="return login()">
+            <input type="text" id="loginUsername" placeholder="Username" required>
+            <input type="password" id="loginPassword" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a href="#signup" onclick="showPage('signup')">Sign Up</a></p>
+    </div>
+
+    <!-- Sign Up Page -->
+    <div id="signup" class="container" style="display: none;">
+        <h2>Sign Up</h2>
+        <form onsubmit="return signup()">
+            <input type="text" id="signupUsername" placeholder="Username" required>
+            <input type="password" id="signupPassword" placeholder="Password" required>
+            <input type="email" id="signupEmail" placeholder="Email" required>
+            <button type="submit">Sign Up</button>
+        </form>
+        <p>Already have an account? <a href="#login" onclick="showPage('login')">Login</a></p>
+    </div>
+
+    <!-- Account Created Page -->
+    <div id="account-created" class="container" style="display: none;">
+        <h2>Account Created Successfully</h2>
+        <p>Your account has been created successfully. Please <a href="#login" onclick="showPage('login')">login</a> to continue.</p>
+    </div>
+
+    <!-- Menu Page -->
+    <div id="menu" class="container" style="display: none;">
+        <h2>Menu</h2>
+        <ul>
+            <li><a href="#exchange-rate" onclick="showPage('exchange-rate')">View Exchange Rate</a></li>
+            <li><a href="#payment-conversion" onclick="showPage('payment-conversion')">Make Transaction</a></li>
+            <li><a href="#logout" onclick="showPage('logout')">Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Exchange Rate Page -->
+    <div id="exchange-rate" class="container" style="display: none;">
+        <h2>Exchange Rate</h2>
+        <ul>
+            <li>USD to EUR: 0.82</li>
+            <li>USD to GBP: 0.74</li>
+            <li>EUR to GBP: 0.9</li>
+        </ul>
+        <p><a href="#menu" onclick="showPage('menu')">Back</a></p>
+    </div>
+
+    <!-- Payment and Conversion Page -->
+    <div id="payment-conversion" class="container" style="display: none;">
+        <h2>Payment and Conversion</h2>
+        <div class="option-container">
+            <label for="currency">Currency:</label>
+            <select id="currency">
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+                <option value="USD">USD</option>
+            </select>
+        </div>
+        <div class="option-container">
+            <label for="fromCurrency">From Currency:</label>
+            <select id="fromCurrency">
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+                <option value="USD">USD</option>
+            </select>
+        </div>
+        <div class="option-container">
+            <label for="toCurrency">To Currency:</label>
+            <select id="toCurrency">
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+                <option value="USD">USD</option>
+            </select>
+        </div>
+        <div class="option-container">
+            <label for="amount">Amount:</label>
+            <input type="text" id="amount" placeholder="Amount">
+        </div>
+        <button onclick="convert()">Convert</button>
+        <button onclick="displayConversionAmount()">Display Conversion Amount</button>
+        <div class="conversion-amount" id="conversionAmount"></div>
+        <p><a href="#menu" onclick="showPage('menu')">Back</a></p>
+    </div>
+
+    <!-- Logout Page -->
+    <div id="logout" class="container" style="display: none;">
+        <h2>Logged Out Successfully</h2>
+        <p>You have been logged out successfully.</p>
+        <p><a href="#login" onclick="showPage('login')">Login Again</a></p>
+    </div>
+
+    <script>
+        // Function to handle login form submission
+        function login() {
+            // Here you can add your login logic
+            alert('Login successful'); // Replace with your logic
+            showPage('menu');
+            return false; // Prevent form submission
+        }
+
+        // Function to handle signup form submission
+        function signup() {
+            // Here you can add your signup logic
+            alert('Sign up successful'); // Replace with your logic
+            showPage('account-created');
+            return false; // Prevent form submission
+        }
+
+        // Function to convert currency
+        function convert() {
+            // Add your conversion logic here
+            alert('Conversion successful'); // Replace with your logic
+            // Show the conversion amount button and result
+            document.getElementById('conversionAmount').textContent = 'Conversion Amount: 100 USD to EUR = 82 EUR';
+            document.querySelector('.conversion-amount').style.display = 'block';
+        }
+
+        // Function to display the conversion amount
+        function displayConversionAmount() {
+            // Retrieve conversion details
+            const fromCurrency = document.getElementById('fromCurrency').value;
+            const toCurrency = document.getElementById('toCurrency').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+
+            // Perform conversion (add your conversion logic here)
+            let convertedAmount;
+            if (fromCurrency === 'EUR' && toCurrency === 'USD') {
+                convertedAmount = amount * 1.22; // For example: 1 EUR = 1.22 USD
+            } else if (fromCurrency === 'USD' && toCurrency === 'EUR') {
+                convertedAmount = amount * 0.82; // For example: 1 USD = 0.82 EUR
+            } else if (fromCurrency === 'GBP' && toCurrency === 'USD') {
+                convertedAmount = amount * 1.34; // For example: 1 GBP = 1.34 USD
+            } else if (fromCurrency === 'USD' && toCurrency === 'GBP') {
+                convertedAmount = amount * 0.74; // For example: 1 USD = 0.74 GBP
+            } else if (fromCurrency === 'EUR' && toCurrency === 'GBP') {
+                convertedAmount = amount * 0.90; // For example: 1 EUR = 0.90 GBP
+            } else if (fromCurrency === 'GBP' && toCurrency === 'EUR') {
+                convertedAmount = amount * 1.11; // For example: 1 GBP = 1.11 EUR
+            } else {
+                // Unsupported conversion
+                alert('Unsupported conversion.');
+                return;
+            }
+
+            // Display the conversion amount
+            document.getElementById('conversionAmount').textContent = `Conversion Amount: ${amount} ${fromCurrency} to ${toCurrency} = ${convertedAmount} ${toCurrency}`;
+            document.querySelector('.conversion-amount').style.display = 'block';
+        }
+
+        // Function to show the specified page and hide others
+        function showPage(pageId) {
+            document.querySelectorAll('.container').forEach(container => {
+                if (container.id === pageId) {
+                    container.style.display = 'block';
+                } else {
+                    container.style.display = 'none';
+                }
+            });
+        }
+
+        // Show the login page by default
+        window.onload = function () {
+            showPage('login');
+        }
+    </script>
+</body>
+</html>
